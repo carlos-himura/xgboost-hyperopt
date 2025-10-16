@@ -1,0 +1,18 @@
+
+# SageMaker and Python cache
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.cache/
+.local/
+.jupyter/
+.ipython/
+.sagemaker_sql_editor_api_cache/
+.virtual_documents/
+user-default-efs
+.bash_history
+logs/
+*.log
+
