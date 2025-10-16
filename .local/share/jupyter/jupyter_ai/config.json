@@ -1,0 +1,10 @@
+{
+    "model_provider_id": "amazon-q:Q-Developer",
+    "embeddings_provider_id": "codesage:codesage-small",
+    "send_with_shift_enter": false,
+    "fields": {},
+    "api_keys": {},
+    "completions_model_provider_id": null,
+    "completions_fields": {},
+    "embeddings_fields": {}
+}
