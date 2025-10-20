@@ -9,6 +9,9 @@ from hyperopt import hp, fmin, tpe, Trials, STATUS_OK
 from hyperopt.pyll.base import scope
 import joblib # serialize the trained model (joblib.dump)
 
+from preprocessing import preprocess_data # Feature engineering and classification script 
+
+
 # --- Evaluate Model (Metrics) ---
 def evaluate_model(model, X, y, dataset_name="Dataset"):
     preds = model.predict(X)
@@ -33,9 +36,16 @@ def main(args):
     valid_path = os.path.join(args.validation, "validation.csv")
     test_path = os.path.join(args.test, "test.csv")
 
+    # Load raw CSVs
     train_df = pd.read_csv(train_path)
     valid_df = pd.read_csv(valid_path)
     test_df = pd.read_csv(test_path)
+
+    # Apply preprocessing to each dataset (Taking the preprocessing.py script)
+    # (This will apply the feature engineering logic from preprocessing.py)
+    train_df = preprocess_data(train_df, is_training=True)
+    valid_df = preprocess_data(valid_df, is_training=True)
+    test_df  = preprocess_data(test_df, is_training=True)
 
     # Separates features and target column
     X_train = train_df.drop("target", axis=1)
@@ -60,13 +70,13 @@ def main(args):
 
     # --- Shorter Ranges for Faster Search ---
     space = {
-        'n_estimators': scope.int(hp.quniform('n_estimators', 500, 900, 100)), # quniform (Linear but rounded) creates a uniform distribution
-        'max_depth': scope.int(hp.quniform('max_depth', 3, 5, 1)), 
-        'learning_rate': hp.loguniform('learning_rate', np.log(0.01), np.log(0.05)), # loguniform (Log space): get more density among smaller numbers
+        'n_estimators': scope.int(hp.quniform('n_estimators', 500, 700, 100)), # quniform (Linear but rounded) creates a uniform distribution
+        'max_depth': scope.int(hp.quniform('max_depth', 3, 4, 1)), 
+        'learning_rate': hp.loguniform('learning_rate', np.log(0.01), np.log(0.04)), # loguniform (Log space): get more density among smaller numbers
         'subsample': hp.uniform('subsample', 0.6, 0.8), # uniform (Linear space)
         'colsample_bytree': hp.uniform('colsample_bytree', 0.7, 0.8),
         'reg_lambda': hp.uniform('reg_lambda', 0.3, 0.5),
-        'gamma': hp.uniform('gamma', 0.25, 0.35),
+        'gamma': hp.uniform('gamma', 0.25, 0.30),
         'random_state': 12345
     }
 
