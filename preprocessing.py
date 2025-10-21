@@ -1,6 +1,6 @@
 import pandas as pd
 
-def preprocess_data(df: pd.DataFrame, is_training: bool = True):
+def preprocess_data(df: pd.DataFrame, is_training: bool = False):
     """
     Apply the same feature engineering and feature selection steps
     used during model training.
